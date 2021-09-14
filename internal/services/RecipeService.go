@@ -43,25 +43,25 @@ func (s recipeService) Create(recipe m.RecipeInput) (m.Recipe, error) {
 }
 
 // converting
-func convertRecipeToDataObject(recipe m.Recipe) m.Recipe {
-	return m.Recipe{
-		ID:             recipe.ID,
-		Title:          recipe.Title,
-		Description:    recipe.Description,
-		Method:         recipe.Method,
-		PrepTime:       recipe.PrepTime,
-		CookTime:       recipe.CookTime,
-		TotalTime:      recipe.TotalTime,
-		Amount_Persons: recipe.Amount_Persons,
-	}
-}
+// func convertRecipeToDataObject(recipe m.Recipe) m.Recipe {
+// 	return m.Recipe{
+// 		ID:             recipe.ID,
+// 		Title:          recipe.Title,
+// 		Description:    recipe.Description,
+// 		Method:         recipe.Method,
+// 		PrepTime:       recipe.PrepTime,
+// 		CookTime:       recipe.CookTime,
+// 		TotalTime:      recipe.TotalTime,
+// 		Amount_Persons: recipe.Amount_Persons,
+// 	}
+// }
 
-func convertRecipesToDataObject(recipes []m.Recipe) []m.Recipe {
-	var data []m.Recipe
+// func convertRecipesToDataObject(recipes []m.Recipe) []m.Recipe {
+// 	var data []m.Recipe
 
-	for _, recipe := range recipes {
-		data = append(data, convertRecipeToDataObject(recipe))
-	}
+// 	for _, recipe := range recipes {
+// 		data = append(data, convertRecipeToDataObject(recipe))
+// 	}
 
-	return data
-}
+// 	return data
+// }

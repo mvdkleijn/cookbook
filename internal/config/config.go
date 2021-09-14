@@ -14,9 +14,11 @@ import (
 )
 
 var (
-	Configuration    Config
-	RecipeRepository interfaces.RecipeRepository
-	RecipeService    services.RecipeService
+	Configuration        Config
+	RecipeRepository     interfaces.RecipeRepository
+	IngredientRepository interfaces.IngredientRepository
+	RecipeService        services.RecipeService
+	IngredientService    services.IngredientService
 )
 
 func initViper() error {
@@ -90,8 +92,10 @@ func init() {
 
 	// Init repositories
 	RecipeRepository = repositories.NewGormRecipeRepository(Configuration.DatabaseClient)
+	IngredientRepository = repositories.NewGormIngredientRepository(Configuration.DatabaseClient)
 
 	// Init services
 	RecipeService = services.NewRecipeService(RecipeRepository)
+	IngredientService = services.NewIngredientService(IngredientRepository)
 
 }

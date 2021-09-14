@@ -34,10 +34,12 @@ func main() {
 	// All GET routes
 	v1get := v1.Methods("GET").Subrouter()
 	v1get.Path("/recipes").HandlerFunc(h.RecipeGetAll)
+	v1get.Path("/ingredients").HandlerFunc(h.IngredientGetAll)
 
 	// All POST routes
 	v1post := v1.Methods("POST").Subrouter()
 	v1post.Path("/recipes").HandlerFunc(h.RecipeCreate)
+	v1post.Path("/ingredients").HandlerFunc(h.IngredientCreate)
 
 	srv := &http.Server{
 		Handler:      router,
