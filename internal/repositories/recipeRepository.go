@@ -29,7 +29,7 @@ func (r gormRecipeRepository) FindAll() ([]m.Recipe, error) {
 	return recipes, nil
 }
 
-func (r gormRecipeRepository) Create(recipe m.RecipeInput) error {
+func (r gormRecipeRepository) Create(recipe m.RecipeInput) (m.Recipe, error) {
 	var recipeDB m.Recipe
 	var ingredients []m.Recipe_Ingredient
 
@@ -73,8 +73,8 @@ func (r gormRecipeRepository) Create(recipe m.RecipeInput) error {
 
 		return nil
 	}); err != nil {
-		return err
+		return recipeDB, err
 	}
 
-	return nil
+	return recipeDB, nil
 }

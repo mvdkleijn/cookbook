@@ -8,6 +8,7 @@ import (
 type IngredientService interface {
 	FindAll() ([]m.Ingredient, error)
 	Create(ingredient m.Ingredient) (m.Ingredient, error)
+	Update(ingredient m.Ingredient) (m.Ingredient, error)
 }
 
 // NewRecipeService creates a new RecipeService instance
@@ -35,7 +36,19 @@ func (s ingredientService) FindAll() ([]m.Ingredient, error) {
 func (s ingredientService) Create(ingredient m.Ingredient) (m.Ingredient, error) {
 	var response m.Ingredient
 
-	if err := s.repository.Create(ingredient); err != nil {
+	response, err := s.repository.Create(ingredient)
+	if err != nil {
+		return response, err
+	}
+
+	return response, nil
+}
+
+func (s ingredientService) Update(ingredient m.Ingredient) (m.Ingredient, error) {
+	var response m.Ingredient
+
+	response, err := s.repository.Update(ingredient)
+	if err != nil {
 		return response, err
 	}
 

@@ -26,7 +26,7 @@ func (r gormIngredientRepository) FindAll() ([]m.Ingredient, error) {
 	return ingredients, nil
 }
 
-func (r gormIngredientRepository) Create(ingredient m.Ingredient) error {
+func (r gormIngredientRepository) Create(ingredient m.Ingredient) (m.Ingredient, error) {
 
 	if err := r.db.Transaction(func(tx *gorm.DB) error {
 
@@ -36,8 +36,24 @@ func (r gormIngredientRepository) Create(ingredient m.Ingredient) error {
 
 		return nil
 	}); err != nil {
-		return err
+		return ingredient, err
 	}
 
-	return nil
+	return ingredient, nil
+}
+
+func (r gormIngredientRepository) Update(ingredient m.Ingredient) (m.Ingredient, error) {
+
+	if err := r.db.Transaction(func(tx *gorm.DB) error {
+
+		if err := tx.Create(&ingredient).Error; err != nil {
+			return err
+		}
+
+		return nil
+	}); err != nil {
+		return ingredient, err
+	}
+
+	return ingredient, nil
 }

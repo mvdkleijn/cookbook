@@ -35,7 +35,8 @@ func (s recipeService) FindAll() ([]m.Recipe, error) {
 func (s recipeService) Create(recipe m.RecipeInput) (m.Recipe, error) {
 	var response m.Recipe
 
-	if err := s.repository.Create(recipe); err != nil {
+	response, err := s.repository.Create(recipe)
+	if err != nil {
 		return response, err
 	}
 

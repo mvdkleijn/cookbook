@@ -26,6 +26,7 @@ func loggingMiddleware(next http.Handler) http.Handler {
 
 func main() {
 	router := mux.NewRouter()
+	omw := h.OidcMW{}
 	router.Use(loggingMiddleware)
 
 	// API versioning setup
@@ -33,13 +34,15 @@ func main() {
 
 	// All GET routes
 	v1get := v1.Methods("GET").Subrouter()
-	v1get.Path("/recipes").HandlerFunc(h.RecipeGetAll)
-	v1get.Path("/ingredients").HandlerFunc(h.IngredientGetAll)
+	v1get.Use(omw.Middleware)
+	v1get.Path("/recipe").HandlerFunc(h.RecipeGetAll)
+	v1get.Path("/ingredient").HandlerFunc(h.IngredientGetAll)
 
 	// All POST routes
 	v1post := v1.Methods("POST").Subrouter()
-	v1post.Path("/recipes").HandlerFunc(h.RecipeCreate)
-	v1post.Path("/ingredients").HandlerFunc(h.IngredientCreate)
+	v1post.Use(omw.Middleware)
+	v1post.Path("/recipe").HandlerFunc(h.RecipeCreate)
+	v1post.Path("/ingredient").HandlerFunc(h.IngredientCreate)
 
 	srv := &http.Server{
 		Handler:      router,

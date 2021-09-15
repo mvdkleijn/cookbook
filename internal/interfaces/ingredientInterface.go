@@ -6,5 +6,6 @@ import (
 
 type IngredientRepository interface {
 	FindAll() ([]m.Ingredient, error)
-	Create(ingredient m.Ingredient) error
+	Create(ingredient m.Ingredient) (m.Ingredient, error)
+	Update(ingredient m.Ingredient) (m.Ingredient, error)
 }

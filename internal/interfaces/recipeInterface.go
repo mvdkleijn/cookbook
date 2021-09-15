@@ -6,5 +6,5 @@ import (
 
 type RecipeRepository interface {
 	FindAll() ([]m.Recipe, error)
-	Create(recipe m.RecipeInput) error
+	Create(recipe m.RecipeInput) (m.Recipe, error)
 }

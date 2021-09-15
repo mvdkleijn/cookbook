@@ -4,6 +4,7 @@ import "gorm.io/gorm"
 
 type Config struct {
 	Global         GlobalConfig
+	Oidc           OidcConfig
 	Database       DatabaseConfig
 	DatabaseClient *gorm.DB
 }
@@ -22,4 +23,9 @@ type DatabaseConfig struct {
 	Port     int
 	SSLMode  string
 	Timezone string
+}
+
+type OidcConfig struct {
+	URL      string
+	ClientID string
 }
