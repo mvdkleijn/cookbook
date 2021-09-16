@@ -17,11 +17,16 @@ var (
 	userCtxKey  = userContextKey("user")
 	ctx         = context.Background()
 	provider, _ = oidc.NewProvider(ctx, config.Configuration.Oidc.URL)
-	verifier    = provider.Verifier(&oidc.Config{ClientID: config.Configuration.Oidc.ClientID})
+	verifier    = provider.Verifier(&oidc.Config{
+		ClientID:             config.Configuration.Oidc.ClientID,
+		SupportedSigningAlgs: config.Configuration.Oidc.SigningAlgs,
+		SkipClientIDCheck:    config.Configuration.Oidc.ClientIDCheck,
+		SkipExpiryCheck:      config.Configuration.Oidc.ExpiryCheck,
+		SkipIssuerCheck:      config.Configuration.Oidc.IssuerCheck,
+	})
 
-	// https://auth0.com/docs/configure/apis/scopes/sample-use-cases-scopes-and-claims
 	claims struct {
-		Name           string `json:"name`
+		Name           string `json:"name"`
 		Nickname       string `json:"nickname"`
 		Picture        string `json:"picture"`
 		UpdatedAt      string `json:"updated_at"`

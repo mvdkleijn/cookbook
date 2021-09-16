@@ -26,6 +26,10 @@ type DatabaseConfig struct {
 }
 
 type OidcConfig struct {
-	URL      string
-	ClientID string
+	URL           string
+	ClientID      string
+	SigningAlgs   []string
+	ClientIDCheck bool
+	ExpiryCheck   bool
+	IssuerCheck   bool
 }
