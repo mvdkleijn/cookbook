@@ -3,7 +3,7 @@ module github.com/ihulsbus/cookbook
 go 1.16
 
 require (
-	github.com/coreos/go-oidc/v3 v3.0.0
+	github.com/coreos/go-oidc/v3 v3.1.0
 	github.com/gopherjs/gopherjs v0.0.0-20200217142428-fce0ec30dd00 // indirect
 	github.com/gorilla/mux v1.8.0
 	github.com/sirupsen/logrus v1.8.1

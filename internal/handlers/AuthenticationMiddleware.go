@@ -20,9 +20,9 @@ var (
 	verifier    = provider.Verifier(&oidc.Config{
 		ClientID:             config.Configuration.Oidc.ClientID,
 		SupportedSigningAlgs: config.Configuration.Oidc.SigningAlgs,
-		SkipClientIDCheck:    config.Configuration.Oidc.ClientIDCheck,
-		SkipExpiryCheck:      config.Configuration.Oidc.ExpiryCheck,
-		SkipIssuerCheck:      config.Configuration.Oidc.IssuerCheck,
+		SkipClientIDCheck:    config.Configuration.Oidc.SkipClientIDCheck,
+		SkipExpiryCheck:      config.Configuration.Oidc.SkipExpiryCheck,
+		SkipIssuerCheck:      config.Configuration.Oidc.SkipIssuerCheck,
 	})
 
 	claims struct {
