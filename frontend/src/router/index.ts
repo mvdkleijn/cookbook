@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import idsrvAuth from '@/auth/auth';
+import idsrvAuth from '@/lib/auth/auth';
 
 import Home from '@/views/Home.vue';
 import authedView from '@/views/authedView.vue';

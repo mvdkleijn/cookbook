@@ -53,7 +53,6 @@ func initViper() error {
 
 func initDatabase(host string, user string, password string, dbname string, port int, sslmode string, timezone string) *gorm.DB {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=%s", host, user, password, dbname, port, sslmode, timezone)
-	log.Debugf(dsn)
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {

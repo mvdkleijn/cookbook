@@ -55,9 +55,7 @@ func (oidcmw *OidcMW) Middleware(next http.Handler) http.Handler {
 			http.Error(w, "unauthorized. No token supplied", http.StatusForbidden)
 			return
 		}
-
 		bearer := strings.Split(token, " ")
-
 		if len(bearer) != 2 || bearer[0] != "Bearer" {
 			http.Error(w, "no valid token found", http.StatusForbidden)
 			return
@@ -83,7 +81,6 @@ func authorizeUser(bearer string) (*m.User, error) {
 
 	if err != nil {
 		err = fmt.Errorf("unable to verify token: %v", bearer)
-		log.Warning(err)
 		return nil, err
 	}
 

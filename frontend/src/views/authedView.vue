@@ -1,10 +1,23 @@
 <template>
-<h1>AuthedView</h1>
-  {{$oidc}}
+  <div>
+    <h1>AuthedView</h1>
+    {{ingredients}}
+  </div>
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-class-component';
+import { Options, Vue } from 'vue-class-component';
+import { getIngredients } from '@/lib/http/http';
 
+@Options({
+  data() {
+    return {
+      ingredients: [],
+    };
+  },
+  mounted() {
+    getIngredients().then((res) => { this.ingredients = res.data; });
+  },
+})
 export default class Home extends Vue {}
 </script>

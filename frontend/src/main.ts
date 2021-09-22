@@ -2,7 +2,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import idsrvAuth from '@/auth/auth';
+import idsrvAuth from '@/lib/auth/auth';
 
 idsrvAuth.startup().then((ok) => {
   if (ok) {
