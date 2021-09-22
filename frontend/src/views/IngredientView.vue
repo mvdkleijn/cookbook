@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>AuthedView</h1>
+    <h1>Ingredients</h1>
     {{ingredients}}
   </div>
 </template>
@@ -19,5 +19,5 @@ import { getIngredients } from '@/lib/http/http';
     getIngredients().then((res) => { this.ingredients = res.data; });
   },
 })
-export default class Home extends Vue {}
+export default class IngredientView extends Vue {}
 </script>

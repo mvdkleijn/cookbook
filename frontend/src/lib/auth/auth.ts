@@ -8,10 +8,10 @@ const idsrvAuth = createOidcAuth(
   SignInType.Window,
   appRootUrl,
   {
-    authority: process.env.COOKBOOK_AUTHORITY,
-    client_id: process.env.COOKBOOK_CLIENTID,
+    authority: process.env.VUE_APP_COOKBOOK_AUTHORITY,
+    client_id: process.env.VUE_APP_COOKBOOK_CLIENTID,
     response_type: 'code',
-    redirect_uri: `${appRootUrl}:8081/oidc/callback`,
+    redirect_uri: `${appRootUrl}oidc/callback`,
     scope: 'openid profile email',
     prompt: 'login',
   },

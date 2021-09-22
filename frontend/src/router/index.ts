@@ -1,28 +1,53 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import idsrvAuth from '@/lib/auth/auth';
 
-import Home from '@/views/Home.vue';
-import authedView from '@/views/authedView.vue';
-import LogoutView from '@/views/LogoutView.vue';
-
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'Home',
-    component: Home,
-  },
-  {
-    path: '/about',
-    name: 'About',
+    name: 'Splashscreen',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    component: () => import(/* webpackChunkName: "splashscreen" */ '@/views/Splashscreen.vue'),
   },
   {
-    path: '/authed',
-    name: 'authedView',
-    component: authedView,
+    path: '/app',
+    name: 'Cookbook',
+    component: () => import(/* webpackChunkName: "cookbook" */ '@/views/Cookbook.vue'),
+    children: [
+      {
+        path: '/app/recipes',
+        name: 'RecipeView',
+        component: () => import(/* webpackChunkName: "recipes" */ '@/views/RecipeView.vue'),
+        meta: {
+          authName: 'main',
+        },
+      },
+      {
+        path: '/app/ingredients',
+        name: 'IngredientView',
+        component: () => import(/* webpackChunkName: "ingredients" */ '@/views/IngredientView.vue'),
+        meta: {
+          authName: 'main',
+        },
+      },
+      {
+        path: '/app/shopping',
+        name: 'ShoppingView',
+        component: () => import(/* webpackChunkName: "shopping" */ '@/views/ShoppingView.vue'),
+        meta: {
+          authName: 'main',
+        },
+      },
+      {
+        path: '/app/planner',
+        name: 'PlannerView',
+        component: () => import(/* webpackChunkName: "planner" */ '@/views/PlannerView.vue'),
+        meta: {
+          authName: 'main',
+        },
+      },
+    ],
     meta: {
       authName: 'main',
     },
@@ -30,7 +55,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/logout',
     name: 'LogoutView',
-    component: LogoutView,
+    component: () => import(/* webpackChunkName: "logout" */ '@/views/LogoutView.vue'),
   },
 ];
 
