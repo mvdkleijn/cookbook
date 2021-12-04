@@ -74,7 +74,9 @@ func initDatabase(host string, user string, password string, dbname string, port
 		&models.UserData{},
 		&models.ShoppingList{},
 		&models.Recipe{},
-		&models.MealPlan{})
+		&models.MealPlan{},
+		&models.IngredientSection{},
+	)
 
 	if err != nil {
 		log.Errorf("Error while automigrating database: %s", err.Error())

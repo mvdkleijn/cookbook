@@ -6,8 +6,10 @@ import (
 )
 
 type RecipeService interface {
-	FindAll() ([]m.Recipe, error)
-	Create(recipe m.RecipeInput) (m.Recipe, error)
+	Find(recipeID int) (m.RecipeDTO, error)
+	FindAll() ([]m.RecipeDTO, error)
+	Create(recipe m.RecipeDTO) (m.RecipeDTO, error)
+	Update(recipe m.RecipeDTO) (m.RecipeDTO, error)
 }
 
 // NewRecipeService creates a new RecipeService instance
@@ -21,7 +23,8 @@ type recipeService struct {
 	repository i.RecipeRepository
 }
 
-func (s recipeService) FindAll() ([]m.Recipe, error) {
+// Find contains the business logic to get all recipes
+func (s recipeService) FindAll() ([]m.RecipeDTO, error) {
 	var recipes []m.Recipe
 
 	recipes, err := s.repository.FindAll()
@@ -29,40 +32,39 @@ func (s recipeService) FindAll() ([]m.Recipe, error) {
 		return nil, err
 	}
 
-	return recipes, nil
+	return m.Recipe{}.ConvertAllToDTO(recipes), nil
 }
 
-func (s recipeService) Create(recipe m.RecipeInput) (m.Recipe, error) {
-	var response m.Recipe
+// Find contains the business logic to get a specific recipe
+func (s recipeService) Find(recipeID int) (m.RecipeDTO, error) {
+	var recipe m.Recipe
 
-	response, err := s.repository.Create(recipe)
+	recipe, err := s.repository.Find(recipeID)
 	if err != nil {
-		return response, err
+		return recipe.ConvertToDTO(), err
 	}
 
-	return response, nil
+	return recipe.ConvertToDTO(), nil
 }
 
-// converting
-// func convertRecipeToDataObject(recipe m.Recipe) m.Recipe {
-// 	return m.Recipe{
-// 		ID:             recipe.ID,
-// 		Title:          recipe.Title,
-// 		Description:    recipe.Description,
-// 		Method:         recipe.Method,
-// 		PrepTime:       recipe.PrepTime,
-// 		CookTime:       recipe.CookTime,
-// 		TotalTime:      recipe.TotalTime,
-// 		Amount_Persons: recipe.Amount_Persons,
-// 	}
-// }
+// Create handles the business logic for the creation of a recipe and passes the recipe object to the recipe repo for processing
+func (s recipeService) Create(recipe m.RecipeDTO) (m.RecipeDTO, error) {
 
-// func convertRecipesToDataObject(recipes []m.Recipe) []m.Recipe {
-// 	var data []m.Recipe
+	response, err := s.repository.Create(recipe.ConvertFromDTO())
+	if err != nil {
+		return response.ConvertToDTO(), err
+	}
 
-// 	for _, recipe := range recipes {
-// 		data = append(data, convertRecipeToDataObject(recipe))
-// 	}
+	return response.ConvertToDTO(), nil
+}
 
-// 	return data
-// }
+func (s recipeService) Update(recipe m.RecipeDTO) (m.RecipeDTO, error) {
+	var updateRecipe m.Recipe
+
+	updateRecipe, err := s.repository.Update(recipe.ConvertFromDTO())
+	if err != nil {
+		return updateRecipe.ConvertToDTO(), err
+	}
+
+	return updateRecipe.ConvertToDTO(), nil
+}

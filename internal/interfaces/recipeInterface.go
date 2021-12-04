@@ -5,6 +5,8 @@ import (
 )
 
 type RecipeRepository interface {
+	Find(recipeID int) (m.Recipe, error)
 	FindAll() ([]m.Recipe, error)
-	Create(recipe m.RecipeInput) (m.Recipe, error)
+	Create(recipe m.Recipe) (m.Recipe, error)
+	Update(recipe m.Recipe) (m.Recipe, error)
 }

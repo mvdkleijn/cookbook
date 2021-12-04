@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"fmt"
 	"log"
 
 	m "github.com/ihulsbus/cookbook/internal/models"
@@ -19,6 +18,7 @@ func NewGormRecipeRepository(db *gorm.DB) gormRecipeRepository {
 	}
 }
 
+// FindAll retrieves all recipes from the database and returns them in a slice
 func (r gormRecipeRepository) FindAll() ([]m.Recipe, error) {
 	var recipes []m.Recipe
 
@@ -29,52 +29,55 @@ func (r gormRecipeRepository) FindAll() ([]m.Recipe, error) {
 	return recipes, nil
 }
 
-func (r gormRecipeRepository) Create(recipe m.RecipeInput) (m.Recipe, error) {
-	var recipeDB m.Recipe
-	var ingredients []m.Recipe_Ingredient
+// Find searches for a specific recipe in the database and returns it when found.
+func (r gormRecipeRepository) Find(recipeID int) (m.Recipe, error) {
+	var recipe m.Recipe
 
-	recipeDB.Title = recipe.Title
-	recipeDB.Description = recipe.Description
-	recipeDB.Method = recipe.Method
-	recipeDB.PrepTime = recipe.PrepTime
-	recipeDB.CookTime = recipe.CookTime
-	recipeDB.TotalTime = recipe.TotalTime
-	recipeDB.Amount_Persons = recipe.Amount_Persons
+	if err := r.db.Preload(clause.Associations).Where("ID = ?", recipeID).Find(&recipe).Error; err != nil {
+		return recipe, err
+	}
+
+	return recipe, nil
+}
+
+// FindRecipeIngredients finds all ingredients associated to a recipe and returns them in a slice
+func (r gormRecipeRepository) FindRecipeIngredients(recipeID int) ([]m.Recipe_Ingredient, error) {
+	var recipeIngredients []m.Recipe_Ingredient
+
+	return recipeIngredients, nil
+}
+
+// Create handles the creation of a recipe and stores the relevant information in the database
+func (r gormRecipeRepository) Create(recipe m.Recipe) (m.Recipe, error) {
 
 	if err := r.db.Transaction(func(tx *gorm.DB) error {
 
-		if err := tx.Create(&recipeDB).Error; err != nil {
+		if err := tx.Create(&recipe).Error; err != nil {
 			return err
 		}
 
-		log.Printf("insertID: %d", recipeDB.ID)
-		for _, ingredient := range recipe.Ingredients {
-			var ingredientDB m.Ingredient
-			var ingredientJoin m.Recipe_Ingredient
+		log.Printf("insertID: %d", recipe.ID)
 
-			ingredientDB.ID = ingredient.ID
-			ingredientJoin.IngredientID = ingredient.ID
-			ingredientDB.Name = ingredient.Name
-			ingredientJoin.Amount = ingredient.Amount
-			ingredientJoin.Unit = ingredient.Unit
-			ingredientJoin.RecipeID = recipeDB.ID
-			fmt.Printf("setting recipe ID %d to ingredient %d. result: %d", recipeDB.ID, ingredientJoin.IngredientID, ingredientJoin.RecipeID)
+		return nil
+	}); err != nil {
+		return recipe, err
+	}
 
-			recipeDB.Ingredients = append(recipeDB.Ingredients, ingredientDB)
-			ingredients = append(ingredients, ingredientJoin)
-		}
-		fmt.Println(ingredients)
+	return recipe, nil
+}
 
-		fmt.Printf("ingredients: %v", ingredients)
+func (r gormRecipeRepository) Update(recipe m.Recipe) (m.Recipe, error) {
 
-		if err := tx.Create(&ingredients).Error; err != nil {
+	if err := r.db.Transaction(func(tx *gorm.DB) error {
+
+		if err := tx.Updates(&recipe).Error; err != nil {
 			return err
 		}
 
 		return nil
 	}); err != nil {
-		return recipeDB, err
+		return recipe, err
 	}
 
-	return recipeDB, nil
+	return recipe, nil
 }
