@@ -54,3 +54,14 @@ func (s ingredientService) Update(ingredient m.Ingredient) (m.Ingredient, error)
 
 	return response, nil
 }
+
+func (s ingredientService) Delete(ingredient m.Ingredient) error {
+
+	// TODO: check if there are recipies using the ingredient. If so, an error should be returned and the ingredient should not be deleted.
+	err := s.repository.Delete(ingredient)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

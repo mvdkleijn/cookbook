@@ -81,3 +81,19 @@ func (r gormRecipeRepository) Update(recipe m.Recipe) (m.Recipe, error) {
 
 	return recipe, nil
 }
+
+func (r gormRecipeRepository) Delete(recipe m.Recipe) error {
+
+	if err := r.db.Transaction(func(tx *gorm.DB) error {
+
+		if err := tx.Delete(&recipe).Error; err != nil {
+			return err
+		}
+
+		return nil
+	}); err != nil {
+		return err
+	}
+
+	return nil
+}

@@ -57,3 +57,19 @@ func (r gormIngredientRepository) Update(ingredient m.Ingredient) (m.Ingredient,
 
 	return ingredient, nil
 }
+
+func (r gormIngredientRepository) Delete(ingredient m.Ingredient) error {
+
+	if err := r.db.Transaction(func(tx *gorm.DB) error {
+
+		if err := tx.Delete(&ingredient).Error; err != nil {
+			return err
+		}
+
+		return nil
+	}); err != nil {
+		return err
+	}
+
+	return nil
+}

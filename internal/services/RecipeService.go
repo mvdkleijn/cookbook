@@ -10,6 +10,7 @@ type RecipeService interface {
 	FindAll() ([]m.RecipeDTO, error)
 	Create(recipe m.RecipeDTO) (m.RecipeDTO, error)
 	Update(recipe m.RecipeDTO) (m.RecipeDTO, error)
+	Delete(recipe m.RecipeDTO) error
 }
 
 // NewRecipeService creates a new RecipeService instance
@@ -59,12 +60,51 @@ func (s recipeService) Create(recipe m.RecipeDTO) (m.RecipeDTO, error) {
 }
 
 func (s recipeService) Update(recipe m.RecipeDTO) (m.RecipeDTO, error) {
-	var updateRecipe m.Recipe
+	var updatedRecipe m.Recipe
+	var originalRecipe m.Recipe
 
-	updateRecipe, err := s.repository.Update(recipe.ConvertFromDTO())
+	originalRecipe, err := s.repository.Find(recipe.ID)
 	if err != nil {
-		return updateRecipe.ConvertToDTO(), err
+		return recipe, err
 	}
 
-	return updateRecipe.ConvertToDTO(), nil
+	if recipe.Title == "" {
+		recipe.Title = originalRecipe.Title
+	}
+
+	if recipe.Description == "" {
+		recipe.Description = originalRecipe.Description
+	}
+
+	if recipe.PrepTime == 0 {
+		recipe.PrepTime = originalRecipe.PrepTime
+	}
+
+	if recipe.CookTime == 0 {
+		recipe.CookTime = originalRecipe.CookTime
+	}
+
+	if recipe.TotalTime == 0 {
+		recipe.TotalTime = recipe.PrepTime + recipe.CookTime
+	}
+
+	if recipe.Amount_Persons == 0 {
+		recipe.Amount_Persons = originalRecipe.Amount_Persons
+	}
+
+	updatedRecipe, err = s.repository.Update(recipe.ConvertFromDTO())
+	if err != nil {
+		return updatedRecipe.ConvertToDTO(), err
+	}
+
+	return updatedRecipe.ConvertToDTO(), nil
+}
+
+func (s recipeService) Delete(recipe m.RecipeDTO) error {
+
+	if err := s.repository.Delete(recipe.ConvertFromDTO()); err != nil {
+		return err
+	}
+
+	return nil
 }

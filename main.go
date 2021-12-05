@@ -44,7 +44,7 @@ func main() {
 	v1put.Use(omw.Middleware)
 
 	// Recipes
-	v1put.Path("/recipe/{recipeID}").HandlerFunc(h.NotImplemented)
+	v1put.Path("/recipe").HandlerFunc(h.RecipeUpdate)
 
 	/*~~~~~~~~~~~~~~~~~~~ All POST routes ~~~~~~~~~~~~~~~~~~~*/
 	v1post := v1.Methods("POST").Subrouter()
@@ -55,6 +55,16 @@ func main() {
 
 	// Ingredients
 	v1post.Path("/ingredient").HandlerFunc(h.IngredientCreate)
+
+	/*~~~~~~~~~~~~~~~~~~~ All DELETE routes ~~~~~~~~~~~~~~~~~~~*/
+	v1del := v1.Methods("DELETE").Subrouter()
+	v1del.Use(omw.Middleware)
+
+	// Recipes
+	v1del.Path("/recipe").HandlerFunc(h.RecipeDelete)
+
+	// Ingredients
+	v1del.Path("/ingredients").HandlerFunc(h.NotImplemented)
 
 	/*~~~~~~~~~~~~~~~~~~~*/
 	// Server startup

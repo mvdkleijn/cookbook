@@ -9,4 +9,5 @@ type RecipeRepository interface {
 	FindAll() ([]m.Recipe, error)
 	Create(recipe m.Recipe) (m.Recipe, error)
 	Update(recipe m.Recipe) (m.Recipe, error)
+	Delete(recipe m.Recipe) error
 }

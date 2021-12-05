@@ -12,8 +12,16 @@ func NotImplemented(w http.ResponseWriter, r *http.Request) {
 	response501(w)
 }
 
+func response200(w http.ResponseWriter) {
+	respondWithJSON(w, 200, "Object deleted")
+}
+
 func response501(w http.ResponseWriter) {
 	respondWithError(w, 501, "Not Implemented")
+}
+
+func response400WithDetails(w http.ResponseWriter, detail string) {
+	respondWithError(w, 400, fmt.Sprintf("Bad Request. (%s)", detail))
 }
 
 func response500WithDetails(w http.ResponseWriter, detail string) {
