@@ -1,8 +1,13 @@
 <template>
-  <div class="background">  
+  <div class="background">
     <div class="splash">
-      <h1>Welcome to your cookbook.</h1>
-      <n-button style="color: white;" size="large" round @click="$router.push('App')">Enter</n-button>
+      <h1>Welcome to the cookbook.</h1>
+      <br/>
+      <Button
+      label="Login"
+      class="p-button-rounded p-button-outlined loginbutton"
+      @click="$router.push('App')"
+      />
     </div>
   </div>
 </template>
@@ -17,7 +22,13 @@ export default class Splashscreen extends Vue {}
   .splash {
     color: white;
     position: fixed;
-    top: 50%;
+    top: 45%;
+    left: 50%;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
+  }
+  .loginbutton {
+    position: fixed;
     left: 50%;
     /* bring your own prefixes */
     transform: translate(-50%, -50%);

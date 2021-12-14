@@ -1,34 +1,24 @@
 <template>
-  <n-page-header class="header">
-    <template #avatar>
-      <n-icon size="40"><Food20Regular /></n-icon>
-    </template>
-    <template #title>
+  <div class="flex header">
+    <div
+    class="flex-initial flex align-items-center justify-content-center title"
+    v-on:click="goHome()">
       Cookbook
-    </template>
-    <template #subtitle>
-      <span>
-        <div class="nav">
-          <router-link to="/app/recipes">Recipes</router-link>
-          <router-link to="/app/ingredients">Ingredients</router-link>
-          <router-link to="/app/shopping">Shopping Lists</router-link>
-          <router-link to="/app/planner">Mealplanner</router-link>
-        </div>
-      </span>
-    </template>
-  </n-page-header>
+    </div>
+    <div class="flex-initial flex align-items-center justify-content-center nav">
+      <router-link to="/app/recipes">Recipes</router-link>
+      <router-link to="/app/ingredients">Ingredients</router-link>
+      <router-link to="/app/shopping">Shopping Lists</router-link>
+      <router-link to="/app/planner">Mealplanner</router-link>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import { NIcon, NPageHeader } from 'naive-ui';
-import { Food20Regular } from '@vicons/fluent';
 
 @Options({
   components: {
-    NIcon,
-    NPageHeader,
-    Food20Regular,
   },
   data() {
     return {
@@ -41,7 +31,7 @@ export default class HeaderBar extends Vue {}
 
 <style lang="scss" scoped>
   .header {
-    height: 5vh;
+    height: 50px;
     box-shadow: 0px 1px 5px 0px;
     width: 100%;
     z-index: 10;
@@ -50,11 +40,15 @@ export default class HeaderBar extends Vue {}
     padding-left: 1vw;
     padding-right: 1vw;
   }
+  .title {
+    margin-right: 5px;
+    margin-bottom: 5px;
+  }
   .nav {
-    justify-content: space-evenly;
-    align-self: center;
-
+    padding-right: 5px;
+    margin-bottom: 5px;
   a {
+    margin-left: 5px;
     font-weight: bold;
     color: #2c3e50;
 

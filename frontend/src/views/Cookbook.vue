@@ -1,6 +1,8 @@
 <template>
-  <HeaderBar/>
-  <router-view/>
+  <div>
+    <HeaderBar/>
+    <router-view class="app-rv" />
+  </div>
 </template>
 
 <script lang="ts">
@@ -11,29 +13,24 @@ import HeaderBar from '@/components/HeaderBar.vue';
   components: {
     HeaderBar,
   },
+  // mounted() {
+  //   const devtools = document.createElement('script')
+  //   devtools.setAttribute('src', 'http://10.0.0.54:8098')
+  //   document.head.appendChild(devtools)
+  // },
 })
-export default class app extends Vue {}
+export default class cookbook extends Vue {}
 </script>
 
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    // text-align: center;
     color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
   }
-}
+  .app-rv {
+    margin-top: 1vh;
+  }
 </style>

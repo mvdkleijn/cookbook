@@ -17,6 +17,17 @@ instance.interceptors.request.use((config) => {
   return conf;
 });
 
+interface IngredientInput {
+  ID: number;
+  amount: number;
+  unit: string;
+}
+
+interface Ingredient {
+  id: number;
+  name: string;
+}
+
 interface RecipeInput {
   ID: number;
   Title: string;
@@ -26,38 +37,32 @@ interface RecipeInput {
   PrepTime: number;
   CookTime: number;
   TotalTime: number;
-  Amount_Persons: number;
+  AmountPersons: number;
 }
 
-interface RecipeResponse {
-  id: number;
-  title: string;
-  description: string;
-  ingredients: Array<IngredientResponse>;
-  method: string;
-  preptime: number;
-  cooktime: number;
-  totaltime: number;
-  persons: number;
-}
-
-interface IngredientInput {
-  ID: number;
-  amount: number;
-  unit: string;
-}
-
-interface IngredientResponse {
-  id: number;
-  name: string;
-}
+// interface RecipeResponse {
+//   id: number;
+//   title: string;
+//   description: string;
+//   ingredients: Array<Ingredient>;
+//   method: string;
+//   preptime: number;
+//   cooktime: number;
+//   totaltime: number;
+//   persons: number;
+// }
 
 export function getRecipes(): Promise<AxiosResponse> {
   const response = instance.get('/recipe');
   return response;
 }
 
-export function createRecipe(item: any): Promise<AxiosResponse> {
+export function getRecipe(id:number): Promise<AxiosResponse> {
+  const response = instance.get(`/recipe/${id}`);
+  return response;
+}
+
+export function createRecipe(item: RecipeInput): Promise<AxiosResponse> {
   const response = instance.post('/recipe', JSON.stringify(item));
   return response;
 }
@@ -67,7 +72,7 @@ export function getIngredients(): Promise<AxiosResponse> {
   return response;
 }
 
-export function createIngredient(item: any): Promise<AxiosResponse> {
+export function createIngredient(item: Ingredient): Promise<AxiosResponse> {
   const response = instance.post('/ingredient', JSON.stringify(item));
   return response;
 }

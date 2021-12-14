@@ -24,6 +24,14 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
       {
+        path: '/app/recipes/:id',
+        name: 'RecipeDetailView',
+        component: () => import(/* webpackChunkName: "recipes" */ '@/views/RecipeDetailView.vue'),
+        meta: {
+          authName: 'main',
+        },
+      },
+      {
         path: '/app/ingredients',
         name: 'IngredientView',
         component: () => import(/* webpackChunkName: "ingredients" */ '@/views/IngredientView.vue'),
