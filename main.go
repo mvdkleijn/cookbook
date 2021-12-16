@@ -35,6 +35,7 @@ func main() {
 	// Recipes
 	v1get.Path("/recipe").HandlerFunc(h.RecipeGetAll)
 	v1get.Path("/recipe/{recipeID}").HandlerFunc(h.RecipeGet)
+	v1get.Path("/recipe/{recipeID}/ingredients").HandlerFunc(h.RecipeIngredientGet)
 
 	// Ingredients
 	v1get.Path("/ingredient").HandlerFunc(h.IngredientGetAll)

@@ -3,7 +3,6 @@ package repositories
 import (
 	m "github.com/ihulsbus/cookbook/internal/models"
 	"gorm.io/gorm"
-	"gorm.io/gorm/clause"
 )
 
 type gormIngredientRepository struct {
@@ -19,11 +18,21 @@ func NewGormIngredientRepository(db *gorm.DB) gormIngredientRepository {
 func (r gormIngredientRepository) FindAll() ([]m.Ingredient, error) {
 	var ingredients []m.Ingredient
 
-	if err := r.db.Preload(clause.Associations).Find(&ingredients).Error; err != nil {
+	if err := r.db.Find(&ingredients).Error; err != nil {
 		return nil, err
 	}
 
 	return ingredients, nil
+}
+
+func (r gormIngredientRepository) FindRecipeIngredients(recipeID int) ([]m.Recipe_Ingredient, error) {
+	var RecipeIngredients []m.Recipe_Ingredient
+
+	if err := r.db.Find(&RecipeIngredients).Where("recipe_id = ?", recipeID).Error; err != nil {
+		return nil, err
+	}
+
+	return RecipeIngredients, nil
 }
 
 func (r gormIngredientRepository) Create(ingredient m.Ingredient) (m.Ingredient, error) {

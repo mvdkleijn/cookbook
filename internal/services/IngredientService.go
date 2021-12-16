@@ -7,6 +7,7 @@ import (
 
 type IngredientService interface {
 	FindAll() ([]m.Ingredient, error)
+	FindRecipeIngredients(recipeID int) ([]m.IngredientDTO, error)
 	Create(ingredient m.Ingredient) (m.Ingredient, error)
 	Update(ingredient m.Ingredient) (m.Ingredient, error)
 }
@@ -31,6 +32,17 @@ func (s ingredientService) FindAll() ([]m.Ingredient, error) {
 	}
 
 	return ingredients, nil
+}
+
+func (s ingredientService) FindRecipeIngredients(recipeID int) ([]m.IngredientDTO, error) {
+	var data []m.Recipe_Ingredient
+
+	data, err := s.repository.FindRecipeIngredients(recipeID)
+	if err != nil {
+		return nil, err
+	}
+
+	return m.Recipe_Ingredient{}.ConvertAllToDTO(data), nil
 }
 
 func (s ingredientService) Create(ingredient m.Ingredient) (m.Ingredient, error) {

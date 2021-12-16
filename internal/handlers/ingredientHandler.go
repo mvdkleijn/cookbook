@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http"
+	"strconv"
 
+	"github.com/gorilla/mux"
 	c "github.com/ihulsbus/cookbook/internal/config"
 	m "github.com/ihulsbus/cookbook/internal/models"
 )
@@ -17,6 +19,23 @@ func IngredientGetAll(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		response500WithDetails(w, err.Error())
 	}
+
+	responseCode = 200
+	respondWithJSON(w, responseCode, data)
+}
+
+func RecipeIngredientGet(w http.ResponseWriter, r *http.Request) {
+	var data []m.IngredientDTO
+	var responseCode int
+
+	vars := mux.Vars(r)
+	rID, err := strconv.Atoi(vars["recipeID"])
+	if err != nil {
+		response500WithDetails(w, err.Error())
+		return
+	}
+
+	data, err = c.IngredientService.FindRecipeIngredients(rID)
 
 	responseCode = 200
 	respondWithJSON(w, responseCode, data)
