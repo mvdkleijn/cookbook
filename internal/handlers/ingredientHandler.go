@@ -11,11 +11,12 @@ import (
 	m "github.com/ihulsbus/cookbook/internal/models"
 )
 
+// Get all ingredients
 func IngredientGetAll(w http.ResponseWriter, r *http.Request) {
 	var data []m.Ingredient
 	var responseCode int
 
-	data, err := c.IngredientService.FindAll()
+	data, err := c.IngredientService.IngredientFindAll()
 	if err != nil {
 		response500WithDetails(w, err.Error())
 	}
@@ -24,6 +25,63 @@ func IngredientGetAll(w http.ResponseWriter, r *http.Request) {
 	respondWithJSON(w, responseCode, data)
 }
 
+// Get a single ingredient
+func IngredientGetSingle(w http.ResponseWriter, r *http.Request) {
+	var data []m.Ingredient
+	var responseCode int
+
+	vars := mux.Vars(r)
+	iID, err := strconv.Atoi(vars["ingredientID"])
+	if err != nil {
+		response500WithDetails(w, err.Error())
+		return
+	}
+
+	data, err = c.IngredientService.IngredientFindSingle(iID)
+	if err != nil {
+		response500WithDetails(w, err.Error())
+	}
+
+	responseCode = 200
+	respondWithJSON(w, responseCode, data)
+}
+
+// Get all ingredient sections
+func SectionsGetAll(w http.ResponseWriter, r *http.Request) {
+	var data []m.Section
+	var responseCode int
+
+	data, err := c.IngredientService.SectionsFindAll()
+	if err != nil {
+		response500WithDetails(w, err.Error())
+	}
+
+	responseCode = 200
+	respondWithJSON(w, responseCode, data)
+}
+
+// Get a single ingredient section
+func SectionsGetSingle(w http.ResponseWriter, r *http.Request) {
+	var data []m.Section
+	var responseCode int
+
+	vars := mux.Vars(r)
+	sID, err := strconv.Atoi(vars["sectionID"])
+	if err != nil {
+		response500WithDetails(w, err.Error())
+		return
+	}
+
+	data, err = c.IngredientService.SectionsFindSingle(sID)
+	if err != nil {
+		response500WithDetails(w, err.Error())
+	}
+
+	responseCode = 200
+	respondWithJSON(w, responseCode, data)
+}
+
+// Get ingredients belonging to a recipe
 func RecipeIngredientGet(w http.ResponseWriter, r *http.Request) {
 	var data []m.IngredientDTO
 	var responseCode int
@@ -36,11 +94,15 @@ func RecipeIngredientGet(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data, err = c.IngredientService.FindRecipeIngredients(rID)
+	if err != nil {
+		response500WithDetails(w, err.Error())
+	}
 
 	responseCode = 200
 	respondWithJSON(w, responseCode, data)
 }
 
+// Create an ingredient
 func IngredientCreate(w http.ResponseWriter, r *http.Request) {
 	var ingredient m.Ingredient
 	var data m.Ingredient

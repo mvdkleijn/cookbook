@@ -6,6 +6,7 @@ import (
 
 	c "github.com/ihulsbus/cookbook/internal/config"
 	h "github.com/ihulsbus/cookbook/internal/handlers"
+	"github.com/rs/cors"
 
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
@@ -38,7 +39,10 @@ func main() {
 	v1get.Path("/recipe/{recipeID}/ingredients").HandlerFunc(h.RecipeIngredientGet)
 
 	// Ingredients
-	v1get.Path("/ingredient").HandlerFunc(h.IngredientGetAll)
+	v1get.Path("/ingredients").HandlerFunc(h.IngredientGetAll)
+	v1get.Path("/ingredients/{ingredientID}").HandlerFunc(h.IngredientGetSingle)
+	v1get.Path("/sections").HandlerFunc(h.SectionsGetAll)
+	v1get.Path("/sections/{sectionID}").HandlerFunc(h.SectionsGetSingle)
 
 	/*~~~~~~~~~~~~~~~~~~~ All PUT routes ~~~~~~~~~~~~~~~~~~~*/
 	v1put := v1.Methods("PUT").Subrouter()
@@ -55,7 +59,7 @@ func main() {
 	v1post.Path("/recipe").HandlerFunc(h.RecipeCreate)
 
 	// Ingredients
-	v1post.Path("/ingredient").HandlerFunc(h.IngredientCreate)
+	v1post.Path("/ingredients").HandlerFunc(h.IngredientCreate)
 
 	/*~~~~~~~~~~~~~~~~~~~ All DELETE routes ~~~~~~~~~~~~~~~~~~~*/
 	v1del := v1.Methods("DELETE").Subrouter()
@@ -68,9 +72,19 @@ func main() {
 	v1del.Path("/ingredients").HandlerFunc(h.NotImplemented)
 
 	/*~~~~~~~~~~~~~~~~~~~*/
+
+	// CORS handler
+	crs := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:8081", "https://localhost:8081", "http://10.0.0.54:8081", "https://10.0.0.54:8081"},
+		AllowCredentials: false,
+		AllowedHeaders:   []string{"Authorization"},
+		Debug:            true,
+	})
+	handler := crs.Handler(router)
+
 	// Server startup
 	srv := &http.Server{
-		Handler:      router,
+		Handler:      handler,
 		Addr:         ":8080",
 		WriteTimeout: 300 * time.Second,
 		ReadTimeout:  15 * time.Second,

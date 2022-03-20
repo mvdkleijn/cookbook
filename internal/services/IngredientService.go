@@ -6,7 +6,10 @@ import (
 )
 
 type IngredientService interface {
-	FindAll() ([]m.Ingredient, error)
+	IngredientFindAll() ([]m.Ingredient, error)
+	IngredientFindSingle(ingredientID int) ([]m.Ingredient, error)
+	SectionsFindAll() ([]m.Section, error)
+	SectionsFindSingle(sectionID int) ([]m.Section, error)
 	FindRecipeIngredients(recipeID int) ([]m.IngredientDTO, error)
 	Create(ingredient m.Ingredient) (m.Ingredient, error)
 	Update(ingredient m.Ingredient) (m.Ingredient, error)
@@ -23,15 +26,48 @@ type ingredientService struct {
 	repository i.IngredientRepository
 }
 
-func (s ingredientService) FindAll() ([]m.Ingredient, error) {
+func (s ingredientService) IngredientFindAll() ([]m.Ingredient, error) {
 	var ingredients []m.Ingredient
 
-	ingredients, err := s.repository.FindAll()
+	ingredients, err := s.repository.IngredientFindAll()
 	if err != nil {
 		return nil, err
 	}
 
 	return ingredients, nil
+}
+
+func (s ingredientService) IngredientFindSingle(ingredientID int) ([]m.Ingredient, error) {
+	var ingredients []m.Ingredient
+
+	ingredients, err := s.repository.IngredientFindSingle(ingredientID)
+	if err != nil {
+		return nil, err
+	}
+
+	return ingredients, nil
+}
+
+func (s ingredientService) SectionsFindAll() ([]m.Section, error) {
+	var sections []m.Section
+
+	sections, err := s.repository.SectionFindAll()
+	if err != nil {
+		return nil, err
+	}
+
+	return sections, nil
+}
+
+func (s ingredientService) SectionsFindSingle(sectionID int) ([]m.Section, error) {
+	var sections []m.Section
+
+	sections, err := s.repository.SectionFindSingle(sectionID)
+	if err != nil {
+		return nil, err
+	}
+
+	return sections, nil
 }
 
 func (s ingredientService) FindRecipeIngredients(recipeID int) ([]m.IngredientDTO, error) {
@@ -48,7 +84,7 @@ func (s ingredientService) FindRecipeIngredients(recipeID int) ([]m.IngredientDT
 func (s ingredientService) Create(ingredient m.Ingredient) (m.Ingredient, error) {
 	var response m.Ingredient
 
-	response, err := s.repository.Create(ingredient)
+	response, err := s.repository.CreateIngredient(ingredient)
 	if err != nil {
 		return response, err
 	}
@@ -59,7 +95,7 @@ func (s ingredientService) Create(ingredient m.Ingredient) (m.Ingredient, error)
 func (s ingredientService) Update(ingredient m.Ingredient) (m.Ingredient, error) {
 	var response m.Ingredient
 
-	response, err := s.repository.Update(ingredient)
+	response, err := s.repository.UpdateIngredient(ingredient)
 	if err != nil {
 		return response, err
 	}
@@ -70,7 +106,7 @@ func (s ingredientService) Update(ingredient m.Ingredient) (m.Ingredient, error)
 func (s ingredientService) Delete(ingredient m.Ingredient) error {
 
 	// TODO: check if there are recipies using the ingredient. If so, an error should be returned and the ingredient should not be deleted.
-	err := s.repository.Delete(ingredient)
+	err := s.repository.DeleteIngredient(ingredient)
 	if err != nil {
 		return err
 	}

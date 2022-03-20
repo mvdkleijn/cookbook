@@ -8,7 +8,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import { getRecipes } from '@/lib/http/http';
+import { Recipes } from '@/lib/http/http';
 import RecipeTable from '@/components/RecipeTable.vue';
 import CreateRecipe from '@/views/CreateRecipe.vue';
 
@@ -25,7 +25,7 @@ import CreateRecipe from '@/views/CreateRecipe.vue';
     };
   },
   mounted() {
-    getRecipes().then((res) => { this.recipes = res.data; });
+    Recipes.getAllRecipes().then((data) => { this.recipes = data; });
   },
 })
 export default class RecipeView extends Vue {}

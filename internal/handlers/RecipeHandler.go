@@ -26,7 +26,7 @@ func RecipeGetAll(w http.ResponseWriter, r *http.Request) {
 }
 
 func RecipeGet(w http.ResponseWriter, r *http.Request) {
-	var data m.RecipeDTO
+	var data m.Recipe
 	var responseCode int
 
 	vars := mux.Vars(r)

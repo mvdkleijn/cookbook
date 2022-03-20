@@ -6,7 +6,7 @@ import (
 )
 
 type RecipeService interface {
-	Find(recipeID int) (m.RecipeDTO, error)
+	Find(recipeID int) (m.Recipe, error)
 	FindAll() ([]m.RecipeDTO, error)
 	Create(recipe m.RecipeDTO) (m.RecipeDTO, error)
 	Update(recipe m.RecipeDTO) (m.RecipeDTO, error)
@@ -37,15 +37,15 @@ func (s recipeService) FindAll() ([]m.RecipeDTO, error) {
 }
 
 // Find contains the business logic to get a specific recipe
-func (s recipeService) Find(recipeID int) (m.RecipeDTO, error) {
+func (s recipeService) Find(recipeID int) (m.Recipe, error) {
 	var recipe m.Recipe
 
 	recipe, err := s.repository.Find(recipeID)
 	if err != nil {
-		return recipe.ConvertToDTO(), err
+		return recipe, err
 	}
 
-	return recipe.ConvertToDTO(), nil
+	return recipe, nil
 }
 
 // Create handles the business logic for the creation of a recipe and passes the recipe object to the recipe repo for processing

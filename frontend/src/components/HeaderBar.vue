@@ -36,8 +36,10 @@ export default class HeaderBar extends Vue {}
     width: 100%;
     z-index: 10;
     position: relative;
-    padding-top: 1vh;
-    padding-left: 1vw;
+    // padding-top: 1vh;
+    // padding-left: 1vw;
+    padding-top: 5px;
+    padding-left: 5px;
     padding-right: 1vw;
   }
   .title {

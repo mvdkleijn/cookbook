@@ -33,7 +33,7 @@ func (r gormRecipeRepository) FindAll() ([]m.Recipe, error) {
 func (r gormRecipeRepository) Find(recipeID int) (m.Recipe, error) {
 	var recipe m.Recipe
 
-	if err := r.db.Preload(clause.Associations).Where("ID = ?", recipeID).Find(&recipe).Error; err != nil {
+	if err := r.db.Preload(clause.Associations).Where(&m.Recipe{ID: recipeID}).Find(&recipe).Error; err != nil {
 		return recipe, err
 	}
 
