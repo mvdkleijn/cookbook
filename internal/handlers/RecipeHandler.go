@@ -15,7 +15,7 @@ func RecipeGetAll(w http.ResponseWriter, r *http.Request) {
 	var data []m.RecipeDTO
 	var responseCode int
 
-	data, err := c.RecipeService.FindAll()
+	data, err := c.RecipeService.FindAllRecipes(c.RecipeService)
 	if err != nil {
 		response500WithDetails(w, err.Error())
 		return
@@ -36,7 +36,7 @@ func RecipeGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err = c.RecipeService.Find(rID)
+	data, err = c.RecipeService.FindSingleRecipe(c.RecipeService, rID)
 	if err != nil {
 		response500WithDetails(w, err.Error())
 		return
@@ -64,7 +64,7 @@ func RecipeCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err = c.RecipeService.Create(recipe)
+	data, err = c.RecipeService.CreateRecipe(c.RecipeService, recipe)
 	if err != nil {
 		response500WithDetails(w, err.Error())
 		return
@@ -96,7 +96,7 @@ func RecipeUpdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err = c.RecipeService.Update(recipe)
+	data, err = c.RecipeService.UpdateRecipe(c.RecipeService, recipe)
 	if err != nil {
 		response500WithDetails(w, err.Error())
 		return
@@ -127,7 +127,7 @@ func RecipeDelete(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = c.RecipeService.Delete(recipe)
+	err = c.RecipeService.DeleteRecipe(c.RecipeService, recipe)
 	if err != nil {
 		response500WithDetails(w, err.Error())
 		return

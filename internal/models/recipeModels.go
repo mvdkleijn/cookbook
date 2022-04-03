@@ -1,15 +1,25 @@
 package models
 
+type Recipe struct {
+	ID                int                 `gorm:"primaryKey;serial;unique;not null;autoIncrement" json:"id"`
+	Title             string              `gorm:"not null" json:"title"`
+	Description       string              `gorm:"not null" json:"description"`
+	Method            string              `json:"method"`
+	Ingredients       []Ingredient        `gorm:"many2many:Recipe_Ingredients;foreignKey:ID" json:"ingredients"`
+	PrepTime          int                 `gorm:"default:0" json:"preptime"`
+	CookTime          int                 `gorm:"default:0" json:"cooktime"`
+	Amount_Persons    int                 `gorm:"default:0" json:"persons"`
+	IngredientAmounts []Recipe_Ingredient `json:"ingredientamounts"`
+}
+
 type RecipeDTO struct {
 	ID             int          `json:"id"`
 	Title          string       `json:"title"`
 	Description    string       `json:"description"`
 	Ingredients    []Ingredient `json:"ingredients"`
-	Sections       []Section    `json:"sections"`
 	Method         string       `json:"method"`
 	PrepTime       int          `json:"preptime"`
 	CookTime       int          `json:"cooktime"`
-	TotalTime      int          `json:"totaltime"`
 	Amount_Persons int          `json:"persons"`
 }
 
@@ -20,11 +30,9 @@ func (r Recipe) ConvertToDTO() RecipeDTO {
 		Title:          r.Title,
 		Description:    r.Description,
 		Ingredients:    r.Ingredients,
-		Sections:       r.Sections,
 		Method:         r.Method,
 		PrepTime:       r.PrepTime,
 		CookTime:       r.CookTime,
-		TotalTime:      r.TotalTime,
 		Amount_Persons: r.Amount_Persons,
 	}
 }
@@ -49,7 +57,6 @@ func (r RecipeDTO) ConvertFromDTO() Recipe {
 		Method:         r.Method,
 		PrepTime:       r.PrepTime,
 		CookTime:       r.CookTime,
-		TotalTime:      r.TotalTime,
 		Amount_Persons: r.Amount_Persons,
 	}
 }

@@ -16,7 +16,7 @@ func IngredientGetAll(w http.ResponseWriter, r *http.Request) {
 	var data []m.Ingredient
 	var responseCode int
 
-	data, err := c.IngredientService.IngredientFindAll()
+	data, err := c.IngredientService.FindAllIngredients(c.IngredientService)
 	if err != nil {
 		response500WithDetails(w, err.Error())
 	}
@@ -37,42 +37,7 @@ func IngredientGetSingle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err = c.IngredientService.IngredientFindSingle(iID)
-	if err != nil {
-		response500WithDetails(w, err.Error())
-	}
-
-	responseCode = 200
-	respondWithJSON(w, responseCode, data)
-}
-
-// Get all ingredient sections
-func SectionsGetAll(w http.ResponseWriter, r *http.Request) {
-	var data []m.Section
-	var responseCode int
-
-	data, err := c.IngredientService.SectionsFindAll()
-	if err != nil {
-		response500WithDetails(w, err.Error())
-	}
-
-	responseCode = 200
-	respondWithJSON(w, responseCode, data)
-}
-
-// Get a single ingredient section
-func SectionsGetSingle(w http.ResponseWriter, r *http.Request) {
-	var data []m.Section
-	var responseCode int
-
-	vars := mux.Vars(r)
-	sID, err := strconv.Atoi(vars["sectionID"])
-	if err != nil {
-		response500WithDetails(w, err.Error())
-		return
-	}
-
-	data, err = c.IngredientService.SectionsFindSingle(sID)
+	data, err = c.IngredientService.FindSingleIngredient(c.IngredientService, iID)
 	if err != nil {
 		response500WithDetails(w, err.Error())
 	}
@@ -93,7 +58,7 @@ func RecipeIngredientGet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err = c.IngredientService.FindRecipeIngredients(rID)
+	data, err = c.IngredientService.FindRecipeIngredients(c.IngredientService, rID)
 	if err != nil {
 		response500WithDetails(w, err.Error())
 	}
@@ -121,7 +86,7 @@ func IngredientCreate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err = c.IngredientService.Create(ingredient)
+	data, err = c.IngredientService.CreateIngredient(c.IngredientService, ingredient)
 	if err != nil {
 		response500WithDetails(w, err.Error())
 	}

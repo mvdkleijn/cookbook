@@ -7,17 +7,50 @@ import (
 	"gorm.io/gorm"
 )
 
-type gormIngredientRepository struct {
+type IngredientFindAll func(r *IngredientRepository) ([]m.Ingredient, error)
+type IngredientFindSingle func(r *IngredientRepository, ingredientID int) ([]m.Ingredient, error)
+type SectionFindAll func(r *IngredientRepository) error
+type SectionFindSingle func(r *IngredientRepository, sectionID int) error
+type FindRecipeIngredients func(r *IngredientRepository, recipeID int) ([]m.Recipe_Ingredient, error)
+type CreateIngredient func(r *IngredientRepository, ingredient m.Ingredient) (m.Ingredient, error)
+type UpdateIngredient func(r *IngredientRepository, ingredient m.Ingredient) (m.Ingredient, error)
+type DeleteIngredient func(r *IngredientRepository, ingredient m.Ingredient) error
+
+type IngredientRepository struct {
 	db *gorm.DB
+
+	// Ingredients
+	IngredientFindAll    IngredientFindAll
+	IngredientFindSingle IngredientFindSingle
+	CreateIngredient     CreateIngredient
+	UpdateIngredient     UpdateIngredient
+	DeleteIngredient     DeleteIngredient
+
+	// Sections
+	SectionFindAll    SectionFindAll
+	SectionFindSingle SectionFindSingle
+
+	// Recipes
+	FindRecipeIngredients FindRecipeIngredients
 }
 
-func NewGormIngredientRepository(db *gorm.DB) gormIngredientRepository {
-	return gormIngredientRepository{
+func NewIngredientRepository(db *gorm.DB) *IngredientRepository {
+	return &IngredientRepository{
 		db: db,
+
+		// Ingredients
+		IngredientFindAll:    ingredientFindAll,
+		IngredientFindSingle: ingredientFindSingle,
+		CreateIngredient:     createIngredient,
+		UpdateIngredient:     updateIngredient,
+		DeleteIngredient:     deleteIngredient,
+
+		// Recipes
+		FindRecipeIngredients: findRecipeIngredients,
 	}
 }
 
-func (r gormIngredientRepository) IngredientFindAll() ([]m.Ingredient, error) {
+func ingredientFindAll(r *IngredientRepository) ([]m.Ingredient, error) {
 	var ingredients []m.Ingredient
 
 	if err := r.db.Find(&ingredients).Error; err != nil {
@@ -27,7 +60,7 @@ func (r gormIngredientRepository) IngredientFindAll() ([]m.Ingredient, error) {
 	return ingredients, nil
 }
 
-func (r gormIngredientRepository) IngredientFindSingle(ingredientID int) ([]m.Ingredient, error) {
+func ingredientFindSingle(r *IngredientRepository, ingredientID int) ([]m.Ingredient, error) {
 	var ingredient []m.Ingredient
 
 	if err := r.db.Where("id = ?", ingredientID).Find(&ingredient).Error; err != nil {
@@ -37,27 +70,7 @@ func (r gormIngredientRepository) IngredientFindSingle(ingredientID int) ([]m.In
 	return ingredient, nil
 }
 
-func (r gormIngredientRepository) SectionFindAll() ([]m.Section, error) {
-	var sections []m.Section
-
-	if err := r.db.Find(&sections).Error; err != nil {
-		return nil, err
-	}
-
-	return sections, nil
-}
-
-func (r gormIngredientRepository) SectionFindSingle(sectionID int) ([]m.Section, error) {
-	var section []m.Section
-
-	if err := r.db.Where("id = ?", sectionID).Find(&section).Error; err != nil {
-		return nil, err
-	}
-
-	return section, nil
-}
-
-func (r gormIngredientRepository) FindRecipeIngredients(recipeID int) ([]m.Recipe_Ingredient, error) {
+func findRecipeIngredients(r *IngredientRepository, recipeID int) ([]m.Recipe_Ingredient, error) {
 	var RecipeIngredients []m.Recipe_Ingredient
 
 	if err := r.db.Preload("SectionID").Where("recipe_id = ?", recipeID).Find(&RecipeIngredients).Error; err != nil {
@@ -67,7 +80,7 @@ func (r gormIngredientRepository) FindRecipeIngredients(recipeID int) ([]m.Recip
 	return RecipeIngredients, nil
 }
 
-func (r gormIngredientRepository) CreateIngredient(ingredient m.Ingredient) (m.Ingredient, error) {
+func createIngredient(r *IngredientRepository, ingredient m.Ingredient) (m.Ingredient, error) {
 
 	if err := r.db.Transaction(func(tx *gorm.DB) error {
 
@@ -83,7 +96,7 @@ func (r gormIngredientRepository) CreateIngredient(ingredient m.Ingredient) (m.I
 	return ingredient, nil
 }
 
-func (r gormIngredientRepository) UpdateIngredient(ingredient m.Ingredient) (m.Ingredient, error) {
+func updateIngredient(r *IngredientRepository, ingredient m.Ingredient) (m.Ingredient, error) {
 
 	if err := r.db.Transaction(func(tx *gorm.DB) error {
 
@@ -99,7 +112,7 @@ func (r gormIngredientRepository) UpdateIngredient(ingredient m.Ingredient) (m.I
 	return ingredient, nil
 }
 
-func (r gormIngredientRepository) DeleteIngredient(ingredient m.Ingredient) error {
+func deleteIngredient(r *IngredientRepository, ingredient m.Ingredient) error {
 
 	if err := r.db.Transaction(func(tx *gorm.DB) error {
 

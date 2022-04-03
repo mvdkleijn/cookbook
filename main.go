@@ -41,8 +41,6 @@ func main() {
 	// Ingredients
 	v1get.Path("/ingredients").HandlerFunc(h.IngredientGetAll)
 	v1get.Path("/ingredients/{ingredientID}").HandlerFunc(h.IngredientGetSingle)
-	v1get.Path("/sections").HandlerFunc(h.SectionsGetAll)
-	v1get.Path("/sections/{sectionID}").HandlerFunc(h.SectionsGetSingle)
 
 	/*~~~~~~~~~~~~~~~~~~~ All PUT routes ~~~~~~~~~~~~~~~~~~~*/
 	v1put := v1.Methods("PUT").Subrouter()

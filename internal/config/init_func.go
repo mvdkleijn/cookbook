@@ -3,7 +3,7 @@ package config
 import (
 	"fmt"
 
-	"github.com/ihulsbus/cookbook/internal/models"
+	m "github.com/ihulsbus/cookbook/internal/models"
 	log "github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -21,28 +21,14 @@ func initDatabase(host string, user string, password string, dbname string, port
 		log.Fatalf("Unable to connect to the database. Exiting..\n%v\n", err)
 	}
 
-	err = db.SetupJoinTable(&models.Recipe{}, "Ingredients", &models.Recipe_Ingredient{})
+	err = db.SetupJoinTable(&m.Recipe{}, "Ingredients", &m.Recipe_Ingredient{})
 	if err != nil {
 		log.Errorf("Error while creating recipe join tables: %s", err.Error())
 	}
-
-	err = db.SetupJoinTable(&models.Recipe{}, "Sections", &models.Recipe_Ingredient{})
-	if err != nil {
-		log.Errorf("Error while creating recipe join tables: %s", err.Error())
-	}
-
-	// err = db.SetupJoinTable(&models.MealPlan{}, "Recipes", &models.MealPlan_Recipe{})
-	// if err != nil {
-	// 	log.Errorf("Error while creating mealplan join tables: %s", err.Error())
-	// }
 
 	err = db.AutoMigrate(
-		&models.Ingredient{},
-		&models.Recipe{},
-		&models.Section{},
-		// &models.ShoppingList{},
-		// &models.MealPlan{},
-		// &models.UserData{},
+		&m.Recipe{},
+		&m.Ingredient{},
 	)
 
 	if err != nil {

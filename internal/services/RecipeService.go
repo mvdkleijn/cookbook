@@ -1,34 +1,44 @@
 package services
 
 import (
-	i "github.com/ihulsbus/cookbook/internal/interfaces"
 	m "github.com/ihulsbus/cookbook/internal/models"
+	r "github.com/ihulsbus/cookbook/internal/repositories"
 )
 
-type RecipeService interface {
-	Find(recipeID int) (m.Recipe, error)
-	FindAll() ([]m.RecipeDTO, error)
-	Create(recipe m.RecipeDTO) (m.RecipeDTO, error)
-	Update(recipe m.RecipeDTO) (m.RecipeDTO, error)
-	Delete(recipe m.RecipeDTO) error
+type FindAllRecipes func(s *RecipeService) ([]m.RecipeDTO, error)
+type FindSingleRecipe func(s *RecipeService, recipeID int) (m.Recipe, error)
+type CreateRecipe func(s *RecipeService, recipe m.RecipeDTO) (m.RecipeDTO, error)
+type UpdateRecipe func(s *RecipeService, recipe m.RecipeDTO) (m.RecipeDTO, error)
+type DeleteRecipe func(s *RecipeService, recipe m.RecipeDTO) error
+
+type RecipeService struct {
+	repo *r.RecipeRepository
+
+	FindAllRecipes   FindAllRecipes
+	FindSingleRecipe FindSingleRecipe
+	CreateRecipe     CreateRecipe
+	UpdateRecipe     UpdateRecipe
+	DeleteRecipe     DeleteRecipe
 }
 
 // NewRecipeService creates a new RecipeService instance
-func NewRecipeService(repo i.RecipeRepository) recipeService {
-	return recipeService{
-		repository: repo,
+func NewRecipeService(recipeRepo *r.RecipeRepository) *RecipeService {
+	return &RecipeService{
+		repo: recipeRepo,
+
+		FindAllRecipes:   findAllRecipes,
+		FindSingleRecipe: findSingleRecipe,
+		CreateRecipe:     createRecipe,
+		UpdateRecipe:     updateRecipe,
+		DeleteRecipe:     deleteRecipe,
 	}
 }
 
-type recipeService struct {
-	repository i.RecipeRepository
-}
-
 // Find contains the business logic to get all recipes
-func (s recipeService) FindAll() ([]m.RecipeDTO, error) {
+func findAllRecipes(s *RecipeService) ([]m.RecipeDTO, error) {
 	var recipes []m.Recipe
 
-	recipes, err := s.repository.FindAll()
+	recipes, err := s.repo.FindAll(s.repo)
 	if err != nil {
 		return nil, err
 	}
@@ -37,10 +47,10 @@ func (s recipeService) FindAll() ([]m.RecipeDTO, error) {
 }
 
 // Find contains the business logic to get a specific recipe
-func (s recipeService) Find(recipeID int) (m.Recipe, error) {
+func findSingleRecipe(s *RecipeService, recipeID int) (m.Recipe, error) {
 	var recipe m.Recipe
 
-	recipe, err := s.repository.Find(recipeID)
+	recipe, err := s.repo.Find(s.repo, recipeID)
 	if err != nil {
 		return recipe, err
 	}
@@ -49,9 +59,9 @@ func (s recipeService) Find(recipeID int) (m.Recipe, error) {
 }
 
 // Create handles the business logic for the creation of a recipe and passes the recipe object to the recipe repo for processing
-func (s recipeService) Create(recipe m.RecipeDTO) (m.RecipeDTO, error) {
+func createRecipe(s *RecipeService, recipe m.RecipeDTO) (m.RecipeDTO, error) {
 
-	response, err := s.repository.Create(recipe.ConvertFromDTO())
+	response, err := s.repo.Create(s.repo, recipe.ConvertFromDTO())
 	if err != nil {
 		return response.ConvertToDTO(), err
 	}
@@ -59,11 +69,11 @@ func (s recipeService) Create(recipe m.RecipeDTO) (m.RecipeDTO, error) {
 	return response.ConvertToDTO(), nil
 }
 
-func (s recipeService) Update(recipe m.RecipeDTO) (m.RecipeDTO, error) {
+func updateRecipe(s *RecipeService, recipe m.RecipeDTO) (m.RecipeDTO, error) {
 	var updatedRecipe m.Recipe
 	var originalRecipe m.Recipe
 
-	originalRecipe, err := s.repository.Find(recipe.ID)
+	originalRecipe, err := s.repo.Find(s.repo, recipe.ID)
 	if err != nil {
 		return recipe, err
 	}
@@ -84,15 +94,11 @@ func (s recipeService) Update(recipe m.RecipeDTO) (m.RecipeDTO, error) {
 		recipe.CookTime = originalRecipe.CookTime
 	}
 
-	if recipe.TotalTime == 0 {
-		recipe.TotalTime = recipe.PrepTime + recipe.CookTime
-	}
-
 	if recipe.Amount_Persons == 0 {
 		recipe.Amount_Persons = originalRecipe.Amount_Persons
 	}
 
-	updatedRecipe, err = s.repository.Update(recipe.ConvertFromDTO())
+	updatedRecipe, err = s.repo.Update(s.repo, recipe.ConvertFromDTO())
 	if err != nil {
 		return updatedRecipe.ConvertToDTO(), err
 	}
@@ -100,9 +106,9 @@ func (s recipeService) Update(recipe m.RecipeDTO) (m.RecipeDTO, error) {
 	return updatedRecipe.ConvertToDTO(), nil
 }
 
-func (s recipeService) Delete(recipe m.RecipeDTO) error {
+func deleteRecipe(s *RecipeService, recipe m.RecipeDTO) error {
 
-	if err := s.repository.Delete(recipe.ConvertFromDTO()); err != nil {
+	if err := s.repo.Delete(s.repo, recipe.ConvertFromDTO()); err != nil {
 		return err
 	}
 

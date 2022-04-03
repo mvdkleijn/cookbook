@@ -1,7 +1,6 @@
 package config
 
 import (
-	"github.com/ihulsbus/cookbook/internal/interfaces"
 	"github.com/ihulsbus/cookbook/internal/repositories"
 	"github.com/ihulsbus/cookbook/internal/services"
 	log "github.com/sirupsen/logrus"
@@ -10,10 +9,10 @@ import (
 
 var (
 	Configuration        Config
-	RecipeRepository     interfaces.RecipeRepository
-	IngredientRepository interfaces.IngredientRepository
-	RecipeService        services.RecipeService
-	IngredientService    services.IngredientService
+	RecipeRepository     *repositories.RecipeRepository
+	IngredientRepository *repositories.IngredientRepository
+	RecipeService        *services.RecipeService
+	IngredientService    *services.IngredientService
 )
 
 func initViper() error {
@@ -53,8 +52,8 @@ func init() {
 	Configuration.DatabaseClient = initDatabase(Configuration.Database.Host, Configuration.Database.Username, Configuration.Database.Password, Configuration.Database.Database, Configuration.Database.Port, Configuration.Database.SSLMode, Configuration.Database.Timezone)
 
 	// Init repositories
-	RecipeRepository = repositories.NewGormRecipeRepository(Configuration.DatabaseClient)
-	IngredientRepository = repositories.NewGormIngredientRepository(Configuration.DatabaseClient)
+	RecipeRepository = repositories.NewRecipeRepository(Configuration.DatabaseClient)
+	IngredientRepository = repositories.NewIngredientRepository(Configuration.DatabaseClient)
 
 	// Init services
 	RecipeService = services.NewRecipeService(RecipeRepository)

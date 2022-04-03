@@ -1,25 +1,43 @@
 package repositories
 
 import (
-	"log"
-
 	m "github.com/ihulsbus/cookbook/internal/models"
+	log "github.com/sirupsen/logrus"
+
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
-type gormRecipeRepository struct {
+type Find func(r *RecipeRepository, recipeID int) (m.Recipe, error)
+type FindAll func(r *RecipeRepository) ([]m.Recipe, error)
+type Create func(r *RecipeRepository, recipe m.Recipe) (m.Recipe, error)
+type Update func(r *RecipeRepository, recipe m.Recipe) (m.Recipe, error)
+type Delete func(r *RecipeRepository, recipe m.Recipe) error
+
+type RecipeRepository struct {
 	db *gorm.DB
+
+	Find    Find
+	FindAll FindAll
+	Create  Create
+	Update  Update
+	Delete  Delete
 }
 
-func NewGormRecipeRepository(db *gorm.DB) gormRecipeRepository {
-	return gormRecipeRepository{
+func NewRecipeRepository(db *gorm.DB) *RecipeRepository {
+	return &RecipeRepository{
 		db: db,
+
+		Find:    find,
+		FindAll: findAll,
+		Create:  create,
+		Update:  update,
+		Delete:  delete,
 	}
 }
 
 // FindAll retrieves all recipes from the database and returns them in a slice
-func (r gormRecipeRepository) FindAll() ([]m.Recipe, error) {
+func findAll(r *RecipeRepository) ([]m.Recipe, error) {
 	var recipes []m.Recipe
 
 	if err := r.db.Preload(clause.Associations).Find(&recipes).Error; err != nil {
@@ -30,25 +48,26 @@ func (r gormRecipeRepository) FindAll() ([]m.Recipe, error) {
 }
 
 // Find searches for a specific recipe in the database and returns it when found.
-func (r gormRecipeRepository) Find(recipeID int) (m.Recipe, error) {
+func find(r *RecipeRepository, recipeID int) (m.Recipe, error) {
 	var recipe m.Recipe
 
 	if err := r.db.Preload(clause.Associations).Where(&m.Recipe{ID: recipeID}).Find(&recipe).Error; err != nil {
 		return recipe, err
 	}
 
+	log.Info(recipe)
 	return recipe, nil
 }
 
 // FindRecipeIngredients finds all ingredients associated to a recipe and returns them in a slice
-func (r gormRecipeRepository) FindRecipeIngredients(recipeID int) ([]m.Recipe_Ingredient, error) {
-	var recipeIngredients []m.Recipe_Ingredient
+// func findRecipeIngredients(r *RecipeRepository, recipeID int) ([]m.Recipe_Ingredient, error) {
+// 	var recipeIngredients []m.Recipe_Ingredient
 
-	return recipeIngredients, nil
-}
+// 	return recipeIngredients, nil
+// }
 
 // Create handles the creation of a recipe and stores the relevant information in the database
-func (r gormRecipeRepository) Create(recipe m.Recipe) (m.Recipe, error) {
+func create(r *RecipeRepository, recipe m.Recipe) (m.Recipe, error) {
 
 	if err := r.db.Transaction(func(tx *gorm.DB) error {
 
@@ -66,7 +85,7 @@ func (r gormRecipeRepository) Create(recipe m.Recipe) (m.Recipe, error) {
 	return recipe, nil
 }
 
-func (r gormRecipeRepository) Update(recipe m.Recipe) (m.Recipe, error) {
+func update(r *RecipeRepository, recipe m.Recipe) (m.Recipe, error) {
 
 	if err := r.db.Transaction(func(tx *gorm.DB) error {
 
@@ -82,7 +101,7 @@ func (r gormRecipeRepository) Update(recipe m.Recipe) (m.Recipe, error) {
 	return recipe, nil
 }
 
-func (r gormRecipeRepository) Delete(recipe m.Recipe) error {
+func delete(r *RecipeRepository, recipe m.Recipe) error {
 
 	if err := r.db.Transaction(func(tx *gorm.DB) error {
 

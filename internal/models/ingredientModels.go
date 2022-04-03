@@ -1,10 +1,22 @@
 package models
 
+type Ingredient struct {
+	ID   int    `gorm:"primaryKey;serial;unique;not null;autoIncrement" json:"id"`
+	Name string `gorm:"not null" json:"name"`
+}
+
 type IngredientDTO struct {
 	RecipeID     int    `json:"recipeid"`
 	IngredientID int    `json:"ingredientid"`
 	Amount       int    `json:"amount"`
 	Unit         string `json:"unit"`
+}
+
+type Recipe_Ingredient struct {
+	RecipeID     int    `gorm:"primaryKey;not null" json:"recipeid"`
+	IngredientID int    `gorm:"primaryKey;not null" json:"ingredientid"`
+	Amount       int    `gorm:"default:0" json:"amount"`
+	Unit         string `gorm:"not null" json:"unit"`
 }
 
 // ConvertToDTO converts a single m.Recipe_Ingredient to a single m.IngredientDTO
