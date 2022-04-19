@@ -1,7 +1,4 @@
 module.exports = {
-  build: {
-    productionSourceMap: false,
-  },
   configureWebpack: {
     devServer: {
       'headers': {
