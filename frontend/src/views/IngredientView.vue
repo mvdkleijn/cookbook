@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Ingredients</h1>
-    <DataTable 
+    <DataTable
       :value="ingredients"
       :paginator="true"
       :rows="10"
@@ -15,8 +15,20 @@
         <div class="flex justify-content-between">
             <span>
               <CreateIngredient />
-              <Button label="Delete" icon="pi pi-trash" class="p-button-danger mr-2" @click="confirmDeleteSelected" :disabled="!selectedProducts || !selectedProducts.length" />
-              <Button type="button" icon="pi pi-filter-slash" label="Clear" class="p-button-outlined" @click="clearFilter()"/>
+              <Button
+                label="Delete"
+                icon="pi pi-trash"
+                class="p-button-danger mr-2"
+                @click="confirmDeleteSelected"
+                :disabled="!selectedProducts || !selectedProducts.length"
+              />
+              <Button
+                type="button"
+                icon="pi pi-filter-slash"
+                label="Clear"
+                class="p-button-outlined"
+                @click="clearFilter()"
+              />
             </span>
             <span class="p-input-icon-left">
                 <i class="pi pi-search" />
@@ -40,8 +52,8 @@
 import { Options, Vue } from 'vue-class-component';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
-import ColumnGroup from 'primevue/columngroup';     //optional for column grouping
-import {FilterMatchMode,FilterOperator} from 'primevue/api';
+import ColumnGroup from 'primevue/columngroup';
+import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { Ingredients } from '@/lib/http/http';
 import CreateIngredient from '@/components/CreateIngredient.vue';
 
@@ -65,7 +77,9 @@ import CreateIngredient from '@/components/CreateIngredient.vue';
     this.initFilters();
   },
   mounted() {
-    Ingredients.getAllIngredients().then((data) => { this.ingredients = data; this.loading = false; });
+    Ingredients.getAllIngredients().then(
+      (data) => { this.ingredients = data; this.loading = false; },
+    );
   },
   methods: {
     clearFilter() {
@@ -73,9 +87,9 @@ import CreateIngredient from '@/components/CreateIngredient.vue';
     },
     initFilters() {
       this.filters = {
-        'global': {value: null, matchMode: FilterMatchMode.CONTAINS},
-        'id': {value: null, matchMode: FilterMatchMode.CONTAINS},
-        'name': {value: null, matchMode: FilterMatchMode.CONTAINS},
+        global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        id: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        name: { value: null, matchMode: FilterMatchMode.CONTAINS },
       };
     },
   },

@@ -1,43 +1,43 @@
 <template>
   <div class="container">
-    <div class="grid">   
-      <div class="card" v-for="recipe in recipes" :key="recipe.title" v-on:click="onClick(recipe.id)">
+    <div class="grid">
+      <div
+      class="card"
+      v-for="recipe in recipes"
+      :key="recipe.title"
+      v-on:click="onClick(recipe.id)">
           <img alt="Header image" :src="require(`@/assets/images/placeholder/${image}`)">
           <span class="title">{{recipe.title}}</span>
       </div>
-      <div class="card" v-for="recipe in recipes" :key="recipe.title" v-on:click="onClick(recipe.id)">
+      <div
+      class="card"
+      v-for="recipe in recipes"
+      :key="recipe.title"
+      v-on:click="onClick(recipe.id)">
           <img alt="Header image" :src="require(`@/assets/images/placeholder/${image}`)">
           <span class="title">{{recipe.title}}</span>
       </div>
-      <div class="card" v-for="recipe in recipes" :key="recipe.title" v-on:click="onClick(recipe.id)">
+      <div
+      class="card"
+      v-for="recipe in recipes"
+      :key="recipe.title"
+      v-on:click="onClick(recipe.id)">
           <img alt="Header image" :src="require(`@/assets/images/placeholder/${image}`)">
           <span class="title">{{recipe.title}}</span>
       </div>
-      <div class="card" v-for="recipe in recipes" :key="recipe.title" v-on:click="onClick(recipe.id)">
+      <div
+      class="card"
+      v-for="recipe in recipes"
+      :key="recipe.title"
+      v-on:click="onClick(recipe.id)">
           <img alt="Header image" :src="require(`@/assets/images/placeholder/${image}`)">
           <span class="title">{{recipe.title}}</span>
       </div>
-      <div class="card" v-for="recipe in recipes" :key="recipe.title" v-on:click="onClick(recipe.id)">
-          <img alt="Header image" :src="require(`@/assets/images/placeholder/${image}`)">
-          <span class="title">{{recipe.title}}</span>
-      </div>
-      <div class="card" v-for="recipe in recipes" :key="recipe.title" v-on:click="onClick(recipe.id)">
-          <img alt="Header image" :src="require(`@/assets/images/placeholder/${image}`)">
-          <span class="title">{{recipe.title}}</span>
-      </div>
-      <div class="card" v-for="recipe in recipes" :key="recipe.title" v-on:click="onClick(recipe.id)">
-          <img alt="Header image" :src="require(`@/assets/images/placeholder/${image}`)">
-          <span class="title">{{recipe.title}}</span>
-      </div>
-      <div class="card" v-for="recipe in recipes" :key="recipe.title" v-on:click="onClick(recipe.id)">
-          <img alt="Header image" :src="require(`@/assets/images/placeholder/${image}`)">
-          <span class="title">{{recipe.title}}</span>
-      </div>
-      <div class="card" v-for="recipe in recipes" :key="recipe.title" v-on:click="onClick(recipe.id)">
-          <img alt="Header image" :src="require(`@/assets/images/placeholder/${image}`)">
-          <span class="title">{{recipe.title}}</span>
-      </div>
-      <div class="card" v-for="recipe in recipes" :key="recipe.title" v-on:click="onClick(recipe.id)">
+      <div
+      class="card"
+      v-for="recipe in recipes"
+      :key="recipe.title"
+      v-on:click="onClick(recipe.id)">
           <img alt="Header image" :src="require(`@/assets/images/placeholder/${image}`)">
           <span class="title">{{recipe.title}}</span>
       </div>
@@ -62,7 +62,6 @@ import { Options, Vue } from 'vue-class-component';
   },
   methods: {
     onClick(recipeID:number) {
-      console.log(recipeID);
       this.$router.push({ name: 'RecipeDetailView', params: { id: recipeID } });
     },
   },

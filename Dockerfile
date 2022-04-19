@@ -31,5 +31,7 @@ FROM ${DISTROLESS_IMAGE}
 # Copy our static executable.
 COPY --from=builder /go/bin/cookbook /go/bin/cookbook
 
-# Run the hello binary.
+EXPOSE 8080
+
+# Run the cookbook binary.
 ENTRYPOINT ["/go/bin/cookbook"]

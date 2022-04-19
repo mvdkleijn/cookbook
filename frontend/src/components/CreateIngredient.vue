@@ -35,7 +35,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Dialog from 'primevue/dialog';
-import { Ingredient } from '@/lib/http/http'
+import { Ingredient } from '@/lib/http/http';
 
 @Options({
   components: {
@@ -46,22 +46,22 @@ import { Ingredient } from '@/lib/http/http'
       visible: false,
       ingredient: new Array<Ingredient>(),
       validationErrors: {
-        type: Object
+        type: Object,
       },
       isFormValid: false,
     };
   },
   methods: {
     openDialog() {
-      this.visible = true
+      this.visible = true;
     },
     closeDialog() {
-      this.visible = false
+      this.visible = false;
     },
     validateForm() {
       if (!this.ingredient.name.trim()) {
-        this.validationErrors['name'] = true;
-      } else { delete this.validationErrors['name']; }
+        this.validationErrors.name = true;
+      } else { delete this.validationErrors.name; }
       this.isFormValid = true;
       this.visible = false;
     },
