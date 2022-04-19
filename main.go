@@ -73,7 +73,7 @@ func main() {
 
 	// CORS handler
 	crs := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:8081", "https://localhost:8081", "http://10.0.0.54:8081", "https://10.0.0.54:8081"},
+		AllowedOrigins:   []string{"*"},
 		AllowCredentials: false,
 		AllowedHeaders:   []string{"Authorization"},
 		Debug:            true,
