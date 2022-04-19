@@ -71,3 +71,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args:
+            - VUE_APP_COOKBOOK_AUTHORITY=${{ secrets.VUE_APP_COOKBOOK_AUTHORITY }}
+            - VUE_APP_COOKBOOK_CLIENTID=${{ secrets.VUE_APP_COOKBOOK_CLIENTID }}
+            - VUE_APP_COOKBOOK_BACKEND_URL=${{ secrets.VUE_APP_COOKBOOK_BACKEND_URL }}
