@@ -16,6 +16,14 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "cookbook" */ '@/views/Cookbook.vue'),
     children: [
       {
+        path: '/app/home',
+        name: 'HomeView',
+        component: () => import(/* webpackChunkName: "home" */ '@/views/HomeView.vue'),
+        meta: {
+          authName: 'main',
+        },
+      },
+      {
         path: '/app/recipes',
         name: 'RecipeView',
         component: () => import(/* webpackChunkName: "recipes" */ '@/views/RecipeView.vue'),
@@ -26,7 +34,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: '/app/recipes/:id',
         name: 'RecipeDetailView',
-        component: () => import(/* webpackChunkName: "recipes" */ '@/views/RecipeDetailView.vue'),
+        component: () => import(/* webpackChunkName: "recipe" */ '@/views/RecipeDetailView.vue'),
         meta: {
           authName: 'main',
         },

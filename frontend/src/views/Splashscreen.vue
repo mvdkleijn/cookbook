@@ -1,13 +1,26 @@
 <template>
   <div class="background">
-    <div class="splash">
-      <h1>Welcome to the cookbook.</h1>
-      <br/>
-      <Button
-      label="Login"
-      class="p-button-rounded p-button-outlined loginbutton"
-      @click="$router.push('App')"
-      />
+    <div class="surface-card p-4 shadow-2 border-round w-full lg:w-2 splash">
+      <div class="text-center mb-5">
+        <img
+          src="~@/assets/images/logos/logo-placeholder.png"
+          alt="Logo Image"
+          height="50"
+          class="mb-3 logo">
+        <div class="text-900 text-3xl font-medium mb-3">Welcome to the cookbook</div>
+      </div>
+      <div>
+        <Button
+          label="Sign In"
+          icon="pi pi-user"
+          class="w-full"
+          @click="$router.push('App')"
+        >
+        </Button>
+      </div>
+    </div>
+    <div class="attribute">
+      Background by <a href="https://unsplash.com/@toddquackenbush?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Todd Quackenbush</a> on <a href="https://unsplash.com/@ih16/likes?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>
     </div>
   </div>
 </template>
@@ -20,19 +33,45 @@ export default class Splashscreen extends Vue {}
 
 <style lang="scss" scoped>
   .splash {
-    color: white;
     position: fixed;
     top: 45%;
     left: 50%;
-    /* bring your own prefixes */
     transform: translate(-50%, -50%);
   }
+
   .loginbutton {
     position: fixed;
     left: 50%;
-    /* bring your own prefixes */
     transform: translate(-50%, -50%);
   }
+
+  .attribute {
+    text-align: center;
+    color: gray;
+    position: fixed;
+    top: 95%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  a:link {
+    color: gray;
+    text-decoration: none;
+  }
+
+  a:visited {
+    color: gray;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  a:active {
+    text-decoration: underline;
+  }
+
   .background {
     width: 100vw;
     height: 100vh;
@@ -42,4 +81,5 @@ export default class Splashscreen extends Vue {}
     -o-background-size: cover;
     background-size: cover;
   }
+
 </style>

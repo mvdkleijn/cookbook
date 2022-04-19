@@ -1,8 +1,12 @@
 <template>
-  <div>
+<div class="container">
+  <div class="header">
     <HeaderBar/>
-    <router-view class="app-rv" />
   </div>
+  <div class="content">
+    <router-view />
+  </div>
+</div>
 </template>
 
 <script lang="ts">
@@ -17,15 +21,33 @@ import HeaderBar from '@/components/HeaderBar.vue';
 export default class cookbook extends Vue {}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    // text-align: center;
     color: #2c3e50;
   }
-  // .app-rv {
-  //   margin-top: 1vh;
-  // }
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.header {
+  flex-shrink: 0;
+  height: 55px;
+  z-index: 10;
+}
+
+.content {
+  flex: 1;
+  overflow-y: scroll;
+}
 </style>

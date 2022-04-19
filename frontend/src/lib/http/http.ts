@@ -42,11 +42,10 @@ export interface RecipeInput {
   Method: string;
   PrepTime: number;
   CookTime: number;
-  TotalTime: number;
   AmountPersons: number;
 }
 
-export interface RecipeIngredientResponse {
+export interface IngredientAmounts {
   recipeid: number;
   ingredientid: number;
   sectionid: number;
@@ -63,33 +62,32 @@ export interface RecipeResponse {
   method: string;
   preptime: number;
   cooktime: number;
-  totaltime: number;
   persons: number;
+  ingredientamounts: Array<IngredientAmounts>;
 }
 
 const responseBody = (response: AxiosResponse) => response.data;
 
 const requests = {
   get: (url: string) => instance.get(url).then(responseBody),
-	post: (url: string, body: {}) => instance.post(url, body).then(responseBody),
-	put: (url: string, body: {}) => instance.put(url, body).then(responseBody),
-	delete: (url: string) => instance.delete(url).then(responseBody),
-}
+  post: (url: string, body: {}) => instance.post(url, body).then(responseBody),
+  put: (url: string, body: {}) => instance.put(url, body).then(responseBody),
+  delete: (url: string) => instance.delete(url).then(responseBody),
+};
 
 export const Recipes = {
   getAllRecipes: (): Promise<RecipeResponse[]> => requests.get('/recipe'),
   getSingleRecipe: (id: number): Promise<RecipeResponse> => requests.get(`/recipe/${id}`),
   createRecipe: (item: RecipeInput): Promise<AxiosResponse> => requests.post('/recipe', JSON.stringify(item)),
-}
+};
 
 export const Ingredients = {
   getAllIngredients: (): Promise<Ingredient[]> => requests.get('/ingredients'),
   getSingleIngredient: (ingredientID: number): Promise<Ingredient[]> => requests.get(`/ingredients/${ingredientID}`),
-  getRecipeIngredients: (recipeID: number): Promise<RecipeIngredientResponse[]> => requests.get(`/recipe/${recipeID}/ingredients`),
   createIngredient: (item: IngredientInput): Promise<AxiosResponse> => requests.post('/ingredients', JSON.stringify(item)),
-}
+};
 
 export const Sections = {
   getAllIngredientSections: (): Promise<Section[]> => requests.get('/sections'),
-  getSingleIngredientSection: (sectionID: number): Promise<Section[]> => requests.get(`/sections/${sectionID}`)
-}
+  getSingleIngredientSection: (sectionID: number): Promise<Section[]> => requests.get(`/sections/${sectionID}`),
+};
