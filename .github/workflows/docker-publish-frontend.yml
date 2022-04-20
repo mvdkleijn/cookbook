@@ -18,10 +18,6 @@ env:
   REGISTRY: ghcr.io
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}/frontend
-  
-defaults:
-  run:
-    working-directory: frontend
 
 jobs:
   build:
@@ -38,6 +34,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v1.3
+        with:
+          envkey_VUE_APP_COOKBOOK_AUTHORITY: ${{ secrets.VUE_APP_COOKBOOK_AUTHORITY }}
+          envkey_VUE_APP_COOKBOOK_CLIENTID: ${{ secrets.VUE_APP_COOKBOOK_CLIENTID }}
+          envkey_VUE_APP_COOKBOOK_BACKEND_URL: ${{ secrets.VUE_APP_COOKBOOK_BACKEND_URL }}
+          directory: ./frontend
+          file_name: .env.production
+          fail_on_empty: true
 
       # Workaround: https://github.com/docker/build-push-action/issues/461
       - name: Setup Docker buildx
@@ -71,7 +76,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            - VUE_APP_COOKBOOK_AUTHORITY=${{ secrets.VUE_APP_COOKBOOK_AUTHORITY }}
-            - VUE_APP_COOKBOOK_CLIENTID=${{ secrets.VUE_APP_COOKBOOK_CLIENTID }}
-            - VUE_APP_COOKBOOK_BACKEND_URL=${{ secrets.VUE_APP_COOKBOOK_BACKEND_URL }}
+
+      - name: Delete production env file
+        if: always()
+        run: |
+          rm frontend/.env.production

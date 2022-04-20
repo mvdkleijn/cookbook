@@ -3,10 +3,6 @@
 # build stage
 FROM node:lts-alpine as build-stage
 
-ARG VUE_APP_COOKBOOK_AUTHORITY
-ARG VUE_APP_COOKBOOK_CLIENTID
-ARG VUE_APP_COOKBOOK_BACKEND_URL
-
 WORKDIR /app
 
 COPY package*.json ./
